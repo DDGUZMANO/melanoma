@@ -1,0 +1,26 @@
+name: Sync Kaggle Notebook
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Ajusta la programación según tus necesidades
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Sync notebook from Kaggle
+        run: |
+          git config --global user.name "DDGUZMANO"
+          git config --global user.email "douglasguzmanorence29@gmail.com"
+          git remote set-url origin https://<GITHUB_TOKEN>@github.com/DDGUZMANO/melanoma.git
+          git pull origin main
+          git add melanoma_douglas.ipynb
+          git commit -m "Añadir workflow para sincronización con Kaggle"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
